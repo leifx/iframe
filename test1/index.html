@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    <button id="btn">按钮</button>
+    <iframe
+      name="myIframe"
+      id="iframe"
+      class=""
+      src="http://localhost:8000/flexible.html"
+      width="500px"
+      height="500px"
+    >
+    </iframe>
+  </body>
+  <script type="text/javascript" charset="utf-8">
+
+    window.onload = function() {
+        const btn = document.getElementById("btn")
+        btn.onclick = function() {
+            iframe.contentWindow.postMessage('禁止套娃','http://localhost:8000/flexible.html')
+        }
+    }
+  
+    // 当flexible页面postMessage被调用后，这个function被addEventListener调用
+    function receiveMessage(event) {
+      console.log(event)
+      // 我们能信任信息来源吗？
+      if (event.origin !== "http://localhost:8000")
+        return;
+        // 假设你已经验证了所受到信息的origin (任何时候你都应该这样做), 一个很方便的方式就是把event.source
+        // 作为回信的对象，并且把event.origin作为targetOrigin
+        event.source.postMessage("我回你!",
+                           event.origin);
+    }
+    window.addEventListener('message',receiveMessage,false);
+   
+  </script>
+</html>

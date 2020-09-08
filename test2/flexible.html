@@ -1,0 +1,50 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: leifxie
+ * @Date: 2020-09-07 10:52:20
+ * @LastEditors: leifxie
+ * @LastEditTime: 2020-09-08 11:08:48
+ * @FilePath: \iframe\test2\flexible.html
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    我是子页面
+    <button id="btnn">按钮</button>
+  </body>
+  <script type="text/javascript" charset="utf-8">
+    // window.parent.fullScreens()
+    function showalert() {
+            alert(222);
+    }
+
+    try {
+      btnn.onclick = function() {
+        window.top.postMessage('我就喜欢套娃','http://localhost:8080/index.html');
+      }
+    } catch (error) {
+
+    }
+
+    function receiveMessage(event) {
+      console.log(event)
+      // 我们能信任信息来源吗？
+      if (event.origin !== "http://localhost:8080")
+        return;
+        // 假设你已经验证了所受到信息的origin (任何时候你都应该这样做), 一个很方便的方式就是把event.source
+        // 作为回信的对象，并且把event.origin作为targetOrigin
+        event.source.postMessage("我再回你!",
+                           event.origin);
+    }
+
+    //监听父窗口信息
+    window.addEventListener('message',receiveMessage, false)
+
+  </script>
+</html>
